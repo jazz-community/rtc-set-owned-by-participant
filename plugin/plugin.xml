@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<!-- https://jazz.net/wiki/bin/view/Main/JAFServiceFramework -->
+<plugin>
+   <extension
+         point="com.ibm.team.repository.common.components">
+      <component
+            id="com.siemens.bt.jazz.services.ccm"
+            name="CCM Services component">
+      </component>
+   </extension>
+
+
+    <!-- PARTICIPANTS -->
+    <extension
+            point="com.ibm.team.process.service.operationParticipants">
+    <operationParticipant
+            class="com.siemens.bt.jazz.services.ccm.participants.SetOwnerParticipant"
+            id="com.siemens.bt.jazz.services.ccm.participants.SetOwnerParticipant"
+            name="Set owned by"
+            operationId="com.ibm.team.workitem.operation.workItemSave">
+        <extensionService
+                componentId="com.siemens.bt.jazz.services.ccm"
+                implementationClass="com.siemens.bt.jazz.services.ccm.participants.SetOwnerParticipant">
+            <prerequisites>
+                <requiredService interface="com.ibm.team.repository.common.service.IContributorService"/>
+                <requiredService interface="com.ibm.team.repository.service.IRepositoryItemService" />
+                <requiredService interface="com.ibm.team.workitem.service.IAuditableServer"/>
+                <requiredService interface="com.ibm.team.workitem.common.IWorkItemCommon" />
+                <requiredService interface="com.ibm.team.workitem.service.IWorkItemServer"/>
+                <requiredService interface="com.ibm.team.process.internal.service.web.IProcessWebUIService"/>
+                <requiredService interface="com.ibm.team.repository.common.service.IContributorService" />
+                <configurationProperties>
+                    <configurationProperty
+                            accessPolicy="OPEN"
+                            default="ScrumMaster"
+                            description="The ID of the CCM-role"
+                            displayableName="CCM Role ID"
+                            name="SetOwnerParticipant.roleID"
+                            required="true"
+                            type="STRING"
+                            updatePolicy="NO_RESTART_REQUIRED">
+                    </configurationProperty>
+                </configurationProperties>
+            </prerequisites>
+        </extensionService>
+    </operationParticipant>
+    </extension>
+</plugin>
