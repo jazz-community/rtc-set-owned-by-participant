@@ -24,7 +24,6 @@ import com.ibm.team.workitem.service.IWorkItemServer;
 import com.siemens.bt.jazz.services.ccm.util.InfoCollectorException;
 import com.siemens.bt.jazz.services.ccm.util.InfoCollectorSeverity;
 import com.siemens.bt.jazz.services.ccm.util.ProcessHelper;
-import com.siemens.bt.jazz.services.ccm.util.WorkItemTypes;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
@@ -33,6 +32,7 @@ import java.util.List;
 public class SetOwnerParticipant extends AbstractService implements
         IOperationParticipant {
 
+    private String roleId;
 
     public void run(AdvisableOperation operation,
                     IProcessConfigurationElement participantConfig,
@@ -54,11 +54,13 @@ public class SetOwnerParticipant extends AbstractService implements
             IWorkItem newWorkItem = (IWorkItem) saveParameter.getNewState();
 
 
-            switch (newWorkItem.getWorkItemType()) {
-                case WorkItemTypes.DEFECT_TYPE_ID:
+            String method = resolveConfig(participantConfig, newWorkItem.getWorkItemType());
+
+            switch (method) {
+                case "Role":
                     setCCMOwner(collector, monitor, processAreaNew, processAreaOld, oldWorkItem, newWorkItem);
                     break;
-                case WorkItemTypes.TASK_TYPE_ID:
+                case "Creator":
                     setCurrentOwner(collector, monitor, processAreaOld, newWorkItem);
                     break;
                 default:
@@ -67,6 +69,19 @@ public class SetOwnerParticipant extends AbstractService implements
 
 
         }
+    }
+
+    private String resolveConfig(IProcessConfigurationElement participantConfig, String workItemType) {
+        IProcessConfigurationElement[] WIs = participantConfig.getChildren();
+        for (IProcessConfigurationElement wi : WIs) {
+            if(wi.getAttribute("type").equals(workItemType)){
+                if(wi.getAttributeNames().length>=3){
+                    roleId = wi.getAttribute("role");
+                }
+                return wi.getAttribute("method");
+            }
+        }
+        return "";
     }
 
     private void setCurrentOwner(IParticipantInfoCollector collector, IProgressMonitor monitor, IProcessArea processAreaOld, IWorkItem newWorkItem) {
@@ -103,19 +118,18 @@ public class SetOwnerParticipant extends AbstractService implements
         }
         //set up
         IWorkItemServer workItemServer = getService(IWorkItemServer.class);
-        String roleName = getStringConfigProperty("SetOwnerParticipant.roleID");
 
         try {
 
             //get ccm of pa, null if none
-            IContributorHandle theCCM = getConbyRole(processAreaNew, roleName);//getInheritedCCM(processAreaNew, roleName);
+            IContributorHandle theCCM = getConbyRole(processAreaNew, roleId);//getInheritedCCM(processAreaNew, roleName);
             if (theCCM == null) {
                 IWorkItemCommon workItemCommon = getService(IWorkItemCommon.class);
                 List<IProcessAreaHandle> processAreasHierarchical = ProcessHelper.getProcessAreasHierarchical(processAreaNew, workItemCommon, monitor, newWorkItem);
                 for (int i = 1; i < processAreasHierarchical.size(); i++) {
                     IProcessAreaHandle currentPaHandle = processAreasHierarchical.get(i);
                     IProcessArea currentPa = (IProcessArea) workItemServer.getAuditableCommon().resolveAuditable(currentPaHandle, ItemProfile.createFullProfile(IProcessArea.ITEM_TYPE), monitor);
-                    theCCM = getConbyRole(currentPa, roleName);
+                    theCCM = getConbyRole(currentPa, roleId);
                     if (theCCM != null) {
                         break;
                     }

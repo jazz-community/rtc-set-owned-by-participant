@@ -2,14 +2,14 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.siemens.bt.jazz.services.ccm
 Bundle-SymbolicName: com.siemens.bt.jazz.services.ccm.test;singleton:=true
-Bundle-Version: 1.0.1.qualifier
+Bundle-Version: 1.1.1.qualifier
 Bundle-Vendor: VENDOR
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: target/dependency/junit-4.12.jar,
  target/dependency/hamcrest-core-1.3.jar,
  target/dependency/gson-2.8.5.jar,
  target/dependency/com.siemens.bt.jazz.services.base-3.0.1-SNAPSHOT.jar,
- target/dependency/com.siemens.bt.jazz.services.ccm-1.0.1-SNAPSHOT.jar,
+ target/dependency/com.siemens.bt.jazz.services.ccm-1.1.1-SNAPSHOT.jar,
  .
 Require-Bundle: com.ibm.team.repository.common,
  com.ibm.team.repository.service,

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.siemens.bt.jazz.services.ccm
 Bundle-SymbolicName: com.siemens.bt.jazz.services.ccm;singleton:=true
-Bundle-Version: 1.0.1.qualifier
+Bundle-Version: 1.1.1.qualifier
 Bundle-Vendor: VENDOR
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: 
@@ -31,8 +31,7 @@ Require-Bundle:
  com.ibm.team.jfs.app.error,
  com.ibm.team.process.common,
  com.ibm.team.process.service
-Bundle-ClassPath: target/dependency/gson-2.8.5.jar,
- target/dependency/com.siemens.bt.jazz.services.base-3.0.1-SNAPSHOT.jar,
+Bundle-ClassPath: target/dependency/com.siemens.bt.jazz.services.base-3.0.1-SNAPSHOT.jar,
  .
 Import-Package: com.ibm.team.jfs.app,
  com.ibm.team.jfs.app.http.util,

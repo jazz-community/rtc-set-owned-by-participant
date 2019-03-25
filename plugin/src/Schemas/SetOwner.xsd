@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns="http://com.siemens.bt.jazz.services.ccm/SetOwner"
+            xmlns:process="http://com.ibm.team.process"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            attributeFormDefault="unqualified" elementFormDefault="qualified"
+            targetNamespace="http://com.siemens.bt.jazz.services.ccm/SetOwner">
+
+    <xsd:import namespace="http://com.ibm.team.process"
+                schemaLocation="platform:/plugin/com.ibm.team.process.common/schema/ProcessSettings.xsd"/>
+
+    <xsd:complexType name="SetOwnerType">
+        <xsd:complexContent>
+            <xsd:restriction base="process:followupActionType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="Workitem">
+                        <xsd:complexType>
+                            <xsd:attribute name="type" type="xsd:string" use="required">
+                            </xsd:attribute>
+                            <xsd:attribute name="method" type="xsd:string" use="required">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:string">
+                                        <xsd:enumeration value="Creator"/>
+                                        <xsd:enumeration value="Role"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:attribute>
+                            <xsd:attribute name="role" type="xsd:string" use="optional">
+                            </xsd:attribute>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+                <xsd:attribute fixed="com.siemens.bt.jazz.services.ccm.participants.SetOwnerParticipant" name="id"
+                               type="xsd:string" use="required"/>
+            </xsd:restriction>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+
+    <xsd:element name="followup-action" substitutionGroup="process:followup-action" type="SetOwnerType"/>
+</xsd:schema>
